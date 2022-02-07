@@ -158,7 +158,7 @@ class MemoryStats(Stats):
         for key, value in (mem_stats.get('stats') or {}).items():
             cls.emit(container, 'memory.stats', [value],
                      type_instance=key, t=t)
-        
+
         mem_usage_no_cache = mem_stats['usage'] - mem_stats['stats']['cache']
         mem_percent = 100.0 * mem_usage_no_cache / mem_stats['limit']
         cls.emit(container, 'memory.percent', ["%.2f" % mem_percent], t=t)
@@ -215,7 +215,7 @@ class ContainerStats(threading.Thread):
                                                      decode=True, stream=False)
                 # Reset failure count on successfull read from the stats API.
                 failures = 0
-            except Exception, e:
+            except Exception as e:
                 collectd.warning('Error reading stats from {container}: {msg}'
                                  .format(container=_c(self._container), msg=e))
 
@@ -333,7 +333,7 @@ class DockerPlugin:
                 t = stats['read']
                 for klass in self.CLASSES:
                     klass.read(container, stats, t)
-            except Exception, e:
+            except Exception as e:
                 collectd.warning(('Error getting stats for container '
                                   '{container}: {msg}')
                                  .format(container=_c(container), msg=e))
@@ -351,18 +351,18 @@ if __name__ == '__main__':
             identifier += '/' + self.type
             if getattr(self, 'type_instance', None):
                 identifier += '-' + self.type_instance
-            print 'PUTVAL', identifier, \
-                  ':'.join(map(str, [int(self.time)] + self.values))
+            print ('PUTVAL', identifier, \
+                  ':'.join(map(str, [int(self.time)] + self.values)))
 
     class ExecCollectd:
         def Values(self):
             return ExecCollectdValues()
 
         def warning(self, msg):
-            print 'WARNING:', msg
+            print ('WARNING:', msg)
 
         def info(self, msg):
-            print 'INFO:', msg
+            print ('INFO:', msg)
 
         def register_read(self, docker_plugin):
             pass
