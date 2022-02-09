@@ -40,7 +40,7 @@ def _c(c):
     argument is a string, it is assumed to be the container's ID and only the
     first 7 digits will be returned. If it's a dictionary, the string returned
     is <7-digit ID>/<name>."""
-    if type(c) == str or type(c) == unicode:
+    if type(c) == str or type(c) == type(u''):
         return c[:7]
     return '{id}/{name}'.format(id=c['Id'][:7], name=c['Name'])
 
